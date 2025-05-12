@@ -1,0 +1,29 @@
+DAYS = 14
+TOPICS = 5
+RETENTION_LEVELS = 11  # 0 a 10
+
+topics = ["Matemáticas", "Física", "Programación", "Bases de Datos", "Redes"]
+exam_day = [13, 12, 11, 10, 9]  # Día del examen para cada tema
+
+def naive(day, topic, retention):
+    if day > exam_day[topic]:
+        return 0
+
+    # Si no se estudia hoy
+    next_ret = max(retention - 1, 0)
+    no_study = naive(day + 1, topic, next_ret)
+
+    # Si se estudia hoy
+    study = naive(day + 1, topic, 10)
+
+    if day == exam_day[topic]:
+        return max(no_study + retention, study + 10)
+    else:
+        return max(no_study, study)
+
+# Evaluamos todos los temas con la función recursiva simple
+total = 0
+for t in range(TOPICS):
+    total += naive(0, t, 10)
+
+print("Puntaje total (sin programación dinámica):", total)
